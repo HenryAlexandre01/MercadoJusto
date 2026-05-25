@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class EstabelecimentoService {
 
-    // Certifique-se de que o método de salvar que criamos antes está aqui...
+    // Garante que o método de salvar está aqui...
     public void salvarProdutoNoBanco(String nome, double preco, String categoria, int idEstabelecimento) {
         String sql = "INSERT INTO produto (nome, preco, categoria, estabelecimento_id) VALUES (?, ?, ?, ?)";
         try (Connection conn = ConexaoBanco.conectar();
@@ -25,7 +25,6 @@ public class EstabelecimentoService {
         }
     }
 
-    // COLE O MÉTODO DE EXIBIR AQUI DENTRO AGORA:
     public void exibirMediaEMelhorPrecoNoBanco(String nomeProduto) {
         String sqlMedia = "SELECT AVG(preco) as media_preco FROM produto WHERE LOWER(nome) = LOWER(?)";
         

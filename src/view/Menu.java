@@ -59,11 +59,11 @@ public class Menu {
         double preco = scanner.nextDouble();
         scanner.nextLine();
 
-        // 1. (Opcional) Faz a validação de preço que você criou no seu ProdutoService
+        // 1. (Opcional) Faz a validação de preço que criou no seu ProdutoService
         service.ProdutoService prodService = new service.ProdutoService();
         if (prodService.validarPreco(preco)) {
             
-            // 2. Chame o método que joga direto no Banco de Dados!
+            // 2. Chama o método que joga direto no Banco de Dados!
             service.salvarProdutoNoBanco(nome, preco, "Geral", escolhaUsuario);
             
         }
@@ -75,8 +75,6 @@ public class Menu {
     private void comparar() {
     System.out.print("Produto para busca: ");
     String busca = scanner.nextLine();
-    
-    // AGORA CHAMA O MÉTODO DO BANCO SEM PASSAR A REDE!
     service.exibirMediaEMelhorPrecoNoBanco(busca);
 }
 
@@ -84,14 +82,12 @@ public class Menu {
     System.out.print("Digite o nome do produto para ver a média regional e o melhor local: ");
     String busca = scanner.nextLine();
     
-    // Deixe APENAS essa linha chamando o service!
     service.exibirMediaEMelhorPrecoNoBanco(busca);
 }
 
    public static void main(String[] args) {
     System.out.println("Testando a ponte com o banco...");
     
-    // Tiramos o "service." da frente e deixamos só o nome da classe
     java.sql.Connection conexao = ConexaoBanco.conectar();
     
     if (conexao != null) {
