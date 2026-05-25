@@ -50,7 +50,7 @@ public class Menu {
     int escolhaUsuario = scanner.nextInt();
     scanner.nextLine();
 
-    // O ID do mercado no banco vai de 1 a 6 (conforme os INSERTs padrão que fizemos)
+    // O ID do mercado no banco vai de 1 a 6
     if (escolhaUsuario >= 1 && escolhaUsuario <= 6) {
         System.out.print("Nome do Produto: "); 
         String nome = scanner.nextLine();
@@ -59,7 +59,7 @@ public class Menu {
         double preco = scanner.nextDouble();
         scanner.nextLine();
 
-        // 1. (Opcional) Faz a validação de preço que criou no seu ProdutoService
+        // Faz a validação de preço que criou no ProdutoService
         service.ProdutoService prodService = new service.ProdutoService();
         if (prodService.validarPreco(preco)) {
             
