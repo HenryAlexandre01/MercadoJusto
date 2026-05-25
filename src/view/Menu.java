@@ -3,6 +3,8 @@ package view;
 import java.util.ArrayList;
 import java.util.Scanner;
 import model.Estabelecimento;
+import model.Estabelecimento.EstabelecimentoCentral;
+import model.Estabelecimento.EstabelecimentoPopular;
 import model.Produto;
 import service.ConexaoBanco;
 import service.EstabelecimentoService;
@@ -12,16 +14,19 @@ public class Menu {
     private EstabelecimentoService service = new EstabelecimentoService();
     private ArrayList<Estabelecimento> rede = new ArrayList<>();
 
+    
     public void iniciar() {
-        // Lista de mercados
-        rede.add(new Estabelecimento("Popular - São João", "Bairro Norte"));
-        rede.add(new Estabelecimento("Popular - Seu zé", "Bairro Sul"));
-        rede.add(new Estabelecimento("Popular - Quitandinnha da Esquina", "Bairro Leste"));
-        rede.add(new Estabelecimento("Central - Dia", "Centro"));
-        rede.add(new Estabelecimento("Central - St marche", "Avenida Principal"));
-        rede.add(new Estabelecimento("Central - Empório Santa Maria", "Terminal"));
+        // Lista de Mercados
+        rede.add(new EstabelecimentoPopular("Popular - São João", "Bairro Norte"));
+        rede.add(new EstabelecimentoPopular("Popular - Seu zé", "Bairro Sul"));
+        rede.add(new EstabelecimentoPopular("Popular - Quitandinnha da Esquina", "Bairro Leste"));
+        
+        rede.add(new EstabelecimentoCentral("Central - Dia", "Centro"));
+        rede.add(new EstabelecimentoCentral("Central - St marche", "Avenida Principal"));
+        rede.add(new EstabelecimentoCentral("Central - Empório Santa Maria", "Terminal"));
 
         int opcao = -1;
+        // Loop do Menu Interativo Funcional (Requisito do Checkpoint 3)
         while (opcao != 0) {
             System.out.println("\n=== MERCADO JUSTO ===");
             System.out.println("1. Cadastrar Produto");
@@ -30,12 +35,13 @@ public class Menu {
             System.out.println("0. Sair");
             System.out.print("Opção: ");
             opcao = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); 
 
             switch (opcao) {
                 case 1: cadastrar(); break;
                 case 2: comparar(); break;
                 case 3: verMedias(); break;
+                default: if(opcao != 0) System.out.println("Opção inválida!");
             }
         }
     }
