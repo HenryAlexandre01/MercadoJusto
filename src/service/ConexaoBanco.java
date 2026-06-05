@@ -5,8 +5,8 @@ import java.sql.DriverManager;
 
 public class ConexaoBanco {
     // Endereço do HeidiSQL
-    private static final String URL = "jdbc:mysql://localhost:3306/mercado_justo";
-    
+    private static final String URL = "jdbc:mariadb://localhost:3306/mercado_justo";
+
     // Usuário e senha que você digita para abrir o HeidiSQL
     private static final String USER = "root"; 
     private static final String PASSWORD = ""; 
