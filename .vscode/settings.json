@@ -1,7 +1,11 @@
 {
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "c:\\Users\\henry\\Downloads\\mysql-connector-j-8.0.33.jar",
-        "src/lib/mariadb-java-client-3.5.8.jar"
-    ]
+    "java.project.referencedLibraries": {
+        "include": [
+            "lib/**/*.jar",
+            "c:\\Users\\henry\\Downloads\\mysql-connector-j-8.0.33.jar"
+        ],
+        "exclude": [
+            "src/lib/mariadb-java-client-3.5.8.jar"
+        ]
+    }
 }
