@@ -1,8 +1,8 @@
-package service;
+package controller;
 
 import model.Produto;
 
-public class ProdutoService {
+public class ProdutoController {
 
     // Validação para verificar se o preço é maior que 0
     public boolean validarPreco(double preco) {

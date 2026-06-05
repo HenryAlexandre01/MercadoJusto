@@ -5,16 +5,17 @@ import java.util.Scanner;
 import model.Estabelecimento;
 import model.Estabelecimento.EstabelecimentoCentral;
 import model.Estabelecimento.EstabelecimentoPopular;
-import service.ConexaoBanco;
-import service.EstabelecimentoService;
+import dao.ConexaoBanco;
+import controller.EstabelecimentoController;
+import controller.ProdutoController;
 
 public class Menu {
     private Scanner scanner = new Scanner(System.in);
-    private EstabelecimentoService service = new EstabelecimentoService();
+    // Instanciando os novos Controllers
+    private EstabelecimentoController estController = new EstabelecimentoController();
     private ArrayList<Estabelecimento> rede = new ArrayList<>();
 
     public void iniciar() {
-        // Lista de Mercados Iniciais
         rede.add(new EstabelecimentoPopular("São João", "Bairro Norte"));
         rede.add(new EstabelecimentoPopular("Seu zé", "Bairro Sul"));
         rede.add(new EstabelecimentoPopular("Quitandinnha da Esquina", "Bairro Leste"));
@@ -67,9 +68,9 @@ public class Menu {
             double preco = scanner.nextDouble();
             scanner.nextLine();
 
-            service.ProdutoService prodService = new service.ProdutoService();
-            if (prodService.validarPreco(preco)) {
-                service.salvarProdutoNoBanco(nome, preco, "Geral", escolhaUsuario);
+            ProdutoController prodController = new ProdutoController();
+            if (prodController.validarPreco(preco)) {
+                estController.salvarProdutoNoBanco(nome, preco, "Geral", escolhaUsuario);
             }
         } else {
             System.out.println("Opção de mercado inválida!");
@@ -90,7 +91,7 @@ public class Menu {
             System.out.print("Digite o nome exato do produto que deseja atualizar: ");
             String nomeProduto = scanner.nextLine();
             
-            double precoAtual = service.buscarPrecoAtualNoBanco(escolhaUsuario, nomeProduto);
+            double precoAtual = estController.buscarPrecoAtualNoBanco(escolhaUsuario, nomeProduto);
             
             if (precoAtual != -1) {
                 System.out.printf("O preço atual deste produto neste mercado é: R$ %.2f\n", precoAtual);
@@ -98,9 +99,9 @@ public class Menu {
                 double novoPreco = scanner.nextDouble();
                 scanner.nextLine(); 
 
-                service.ProdutoService prodService = new service.ProdutoService();
-                if (prodService.validarPreco(novoPreco)) {
-                    service.atualizarPrecoNoBanco(escolhaUsuario, nomeProduto, novoPreco);
+                ProdutoController prodController = new ProdutoController();
+                if (prodController.validarPreco(novoPreco)) {
+                    estController.atualizarPrecoNoBanco(escolhaUsuario, nomeProduto, novoPreco);
                 }
             } else {
                 System.out.println("Aviso: Nenhum produto com esse nome foi encontrado neste mercado.");
@@ -128,7 +129,7 @@ public class Menu {
             String confirmacao = scanner.nextLine().trim().toUpperCase();
             
             if (confirmacao.equals("S")) {
-                service.deletarProdutoNoBanco(escolhaUsuario, nomeProduto);
+                estController.deletarProdutoNoBanco(escolhaUsuario, nomeProduto);
             } else {
                 System.out.println("Operação cancelada pelo usuário.");
             }
@@ -156,7 +157,7 @@ public class Menu {
             if (nome.trim().isEmpty() || bairro.trim().isEmpty()) {
                 System.out.println("Erro: Nome e Endereço não podem ser vazios.");
             } else {
-                service.salvarEstabelecimentoNoBanco(nome, bairro, tipo);
+                estController.salvarEstabelecimentoNoBanco(nome, bairro, tipo);
                 if (tipo == 1) {
                     rede.add(new EstabelecimentoPopular(nome, bairro));
                 } else {
@@ -171,13 +172,13 @@ public class Menu {
     private void comparar() {
         System.out.print("Produto para busca: ");
         String busca = scanner.nextLine();
-        service.exibirMediaEMelhorPrecoNoBanco(busca);
+        estController.exibirMediaEMelhorPrecoNoBanco(busca);
     }
 
     private void verMedias() {
         System.out.print("Digite o nome do produto para ver a média regional e o melhor local: ");
         String busca = scanner.nextLine();
-        service.exibirMediaEMelhorPrecoNoBanco(busca);
+        estController.exibirMediaEMelhorPrecoNoBanco(busca);
     }
 
     public static void main(String[] args) {

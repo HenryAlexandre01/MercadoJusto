@@ -2,9 +2,7 @@ package model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-
-import service.ConexaoBanco;
+import dao.ConexaoBanco;
 
 /*
 * Classe mãe
@@ -70,12 +68,6 @@ public void salvarEstabelecimentoNoBanco(String nome, String bairro, int tipo) {
         
         System.out.println("Sucesso: Novo estabelecimento cadastrado no HeidiSQL!");
         
-        Estabelecimento novo;
-        if (tipo == 1) {
-            novo = new Estabelecimento.EstabelecimentoPopular(nome, bairro);
-        } else {
-            novo = new Estabelecimento.EstabelecimentoCentral(nome, bairro);
-        }
         
     } catch (SQLException e) {
         System.out.println("Erro ao salvar estabelecimento no banco: " + e.getMessage());

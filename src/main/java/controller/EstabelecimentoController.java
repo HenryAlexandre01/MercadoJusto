@@ -1,36 +1,33 @@
-package service;
+package controller;
 
-import model.Estabelecimento;
-import model.Produto;
-import java.util.ArrayList;
+import dao.ConexaoBanco; // Importação necessária para conectar ao banco
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class EstabelecimentoService {
-
+public class EstabelecimentoController {
 
     public double buscarPrecoAtualNoBanco(int idEstabelecimento, String nomeProduto) {
-    String sql = "SELECT preco FROM produto WHERE estabelecimento_id = ? AND LOWER(nome) = LOWER(?)";
-    
-    try (Connection conn = ConexaoBanco.conectar();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "SELECT preco FROM produto WHERE estabelecimento_id = ? AND LOWER(nome) = LOWER(?)";
         
-        stmt.setInt(1, idEstabelecimento);
-        stmt.setString(2, nomeProduto);
-        
-        try (ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                return rs.getDouble("preco"); // Retorna o preço encontrado
+        try (Connection conn = ConexaoBanco.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, idEstabelecimento);
+            stmt.setString(2, nomeProduto);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("preco");
+                }
             }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar preço atual: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Erro ao buscar preço atual: " + e.getMessage());
+        return -1; 
     }
-    return -1; // Retorna -1 se o produto não existir nesse mercado
-}
-    // Método responsável por atualizar o preço de um produto existente
+
     public void atualizarPrecoNoBanco(int idEstabelecimento, String nomeProduto, double novoPreco) {
         String sql = "UPDATE produto SET preco = ? WHERE estabelecimento_id = ? AND LOWER(nome) = LOWER(?)";
         
@@ -48,13 +45,11 @@ public class EstabelecimentoService {
             } else {
                 System.out.println("Aviso: Nenhum produto com esse nome foi encontrado neste mercado.");
             }
-            
         } catch (SQLException e) {
             System.out.println("Erro ao atualizar preço no banco: " + e.getMessage());
         }
     }
 
-    // Método responsável por salvar um novo estabelecimento (Opção 4)
     public void salvarEstabelecimentoNoBanco(String nome, String bairro, int tipo) {
         String sql = "INSERT INTO estabelecimento (nome_fantasia, endereco) VALUES (?, ?)";
         try (Connection conn = ConexaoBanco.conectar();
@@ -68,7 +63,6 @@ public class EstabelecimentoService {
         }
     }
 
-    // Método responsável por salvar novos produtos (Opção 1)
     public void salvarProdutoNoBanco(String nome, double preco, String categoria, int idEstabelecimento) {
         String sql = "INSERT INTO produto (nome, preco, categoria, estabelecimento_id) VALUES (?, ?, ?, ?)";
         try (Connection conn = ConexaoBanco.conectar();
@@ -85,29 +79,26 @@ public class EstabelecimentoService {
     }
 
     public void deletarProdutoNoBanco(int idEstabelecimento, String nomeProduto) {
-    // SQL que deleta o produto filtrando pelo mercado e pelo nome exato
-    String sql = "DELETE FROM produto WHERE estabelecimento_id = ? AND LOWER(nome) = LOWER(?)";
-    
-    try (Connection conn = ConexaoBanco.conectar();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "DELETE FROM produto WHERE estabelecimento_id = ? AND LOWER(nome) = LOWER(?)";
         
-        stmt.setInt(1, idEstabelecimento);
-        stmt.setString(2, nomeProduto);
-        
-        int linhasAfetadas = stmt.executeUpdate();
-        
-        if (linhasAfetadas > 0) {
-            System.out.println("Sucesso: Produto excluído com sucesso!");
-        } else {
-            System.out.println("Aviso: Nenhum produto com esse nome foi encontrado neste mercado para ser excluído.");
+        try (Connection conn = ConexaoBanco.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, idEstabelecimento);
+            stmt.setString(2, nomeProduto);
+            
+            int linhasAfetadas = stmt.executeUpdate();
+            
+            if (linhasAfetadas > 0) {
+                System.out.println("Sucesso: Produto excluído com sucesso!");
+            } else {
+                System.out.println("Aviso: Nenhum produto com esse nome foi encontrado neste mercado para ser excluído.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao deletar produto no banco: " + e.getMessage());
         }
-        
-    } catch (SQLException e) {
-        System.out.println("Erro ao deletar produto no banco: " + e.getMessage());
     }
-}
 
-    // Método responsável por exibir médias regionais e o melhor preço (Opções 2 e 3)
     public void exibirMediaEMelhorPrecoNoBanco(String nomeProduto) {
         String sqlMedia = "SELECT AVG(preco) as media_preco FROM produto WHERE LOWER(nome) = LOWER(?)";
         
@@ -117,7 +108,6 @@ public class EstabelecimentoService {
                                 "ORDER BY p.preco ASC LIMIT 1";
 
         try (Connection conn = ConexaoBanco.conectar()) {
-            
             double media = 0;
             try (PreparedStatement stmtMedia = conn.prepareStatement(sqlMedia)) {
                 stmtMedia.setString(1, nomeProduto);
@@ -134,7 +124,6 @@ public class EstabelecimentoService {
             }
 
             System.out.printf("\nA média de preço para '%s' na região é: R$ %.2f\n", nomeProduto, media);
-            System.out.println("Use esse valor para identificar se um mercado está cobrando um preço justo.");
 
             try (PreparedStatement stmtMelhor = conn.prepareStatement(sqlMelhorPreco)) {
                 stmtMelhor.setString(1, nomeProduto);
@@ -154,7 +143,6 @@ public class EstabelecimentoService {
                     }
                 }
             }
-
         } catch (SQLException e) {
             System.out.println("Erro ao buscar dados no banco: " + e.getMessage());
         }
