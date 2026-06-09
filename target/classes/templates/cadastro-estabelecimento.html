@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <h2>Cadastrar nova loja</h2>
+    <form th:action="@{/estabelecimento/salvar}" th:object="${estabelecimento}" method="post">
+        
+        <div class="mb-3">
+            <label>Nome:</label>
+            <input type="text" th:field="*{nomeLoja}" class="form-control" required>
+        </div>
+        
+        <div class="mb-3">
+            <label>Bairro:</label>
+            <input type="text" th:field="*{bairro}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Endereço:</label>
+            <input type="text" th:field="*{endereco}" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Tipo:</label>
+            <select th:field="*{tipo}" class="form-control">
+                <option value="POPULAR">Popular</option>
+                <option value="CENTRAL">Central</option>
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-success">Salvar Loja</button>
+        <a href="/" class="btn btn-secondary">Voltar</a>
+    </form>
+</body>
+</html>
